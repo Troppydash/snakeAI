@@ -29,12 +29,18 @@ class Snake:
 
         self.is_dead = False
 
+    def contains(self, pos):
+        for block in self.body:
+            if pos == block:
+                return True
+        return False
+
     def check_dead(self):
         for index, body in enumerate(self.body):
             # Out of bounds
-            if body[0] > BOARD_WIDTH or body[0] < 0:
+            if body[0] > BOARD_WIDTH-1 or body[0] < 0:
                 return True
-            elif body[1] > BOARD_HEIGHT or body[1] < 0:
+            elif body[1] > BOARD_HEIGHT-1 or body[1] < 0:
                 return True
 
             # Same Location
@@ -44,11 +50,7 @@ class Snake:
         return False
 
     def draw(self, window):
-        self.tick += 1
-        if self.tick > 7:
-            self.move()
-            self.tick = 0
-            self.is_dead = self.check_dead()
+
 
         for block in self.body:
             window.blit(
@@ -63,6 +65,13 @@ class Snake:
         if self.facing % 2 == new_direction % 2:
             return
         self.facing = new_direction
+
+    def move_if_able(self):
+        self.tick += 1
+        if self.tick > 3:
+            self.move()
+            self.tick = 0
+            self.is_dead = self.check_dead()
 
     def move(self):
         new_body = []
